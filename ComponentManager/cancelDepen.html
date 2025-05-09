@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="/projetoweb/Login/lang.js"></script>
+
+    <link rel="stylesheet" href="/projetoweb/CSS/styleTest1.css">
+    <script src="/projetoweb/CSS/theme.js" defer></script>
+    <title>Cancel dependency</title>
+</head>
+<body>
+    <div class="form">
+        <h1>Cancel Dependency</h1>
+        <?php include 'listComp.php';?>
+        <br/><br/>
+        <form action="" method="post">
+            Component: <input type="text" name="compID" placeholder="ID"></br>
+            <br/>
+            Dependent component: <input type="text" name="compDepend" placeholder="ID"></br>
+            <br/>
+            <input type="submit" value="Register">
+            <br/>
+            <br/>
+            <input type="button" value="Return" onclick="window.location.href='manageDepen.html';">
+            <br/>
+            <input type="button" value="Back to menu" onclick="window.location.href='/projetoweb/devUser.html';">
+            <br/>
+            <br/>
+        </form>
+
+        <?php
+            function getComponentDependencies($ligacao, $compID){
+                if (!isset($_SESSION['UserID'])) {
+                    header("Location: Login/login.html");
+                    exit();
+                }
+
+                $consulta_componentDependencies = "SELECT compDepend FROM srsComp WHERE CompID = '" . $compID . "'";
+                $resultado_componentDependencies = mysqli_query($ligacao, $consulta_componentDependencies);
+
+                if ($resultado_componentDependencies->num_rows > 0) {
+                    $row = $resultado_componentDependencies->fetch_assoc();
+                    return $row["compDepend"];
+                } else {
+                    return -1;
+                }
+            }
+
+            $servidor = 'localhost';
+            $user = 'root';
+            $dbname = 'srsWeb';
+
+            $ligacao = mysqli_connect($servidor, $user) or die("Sem ligação");
+            mysqli_select_db($ligacao, $dbname) or die("Sem DB");
+
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $compID = $_POST['compID'];
+
+                $compDependExist = getComponentDependencies($ligacao, $compID);
+
+                if ($compDependExist == -1 || $compDependExist == NULL) {
+                    echo "There are no dependencies to be removed.";
+                } else {
+                    $compDepend = NULL;
+                    $register_componentDependencie = "UPDATE srsComp SET compDepend = NULL WHERE CompID = '" . $compID . "'";
+                    if ($ligacao->query($register_componentDependencie) === TRUE) {
+                        header("Location: /projetoweb/devUser.html");
+                        exit();
+                    } else {
+                        echo "Error: " . $register_componentDependencie . "<br>" . $ligacao->error;
+                    }
+                }
+            }
+        ?>
+    </div>
+</body>
+</html>

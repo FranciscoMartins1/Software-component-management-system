@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script src="Login/lang.js"></script>
+
+		<link rel="stylesheet" href="CSS/styleTest1.css">
+		<script src="CSS/theme.js" defer></script>
+		<title>Admin Menu</title>
+	</head>
+	
+	<body>
+		<div class="form">
+			<?php
+				session_start();
+				if ($_SESSION["RoleName"] != "admin") 
+					header("Location: Login/login.html");
+			?>
+			<h1>Administrator</h1>
+			<?php
+				echo "<h2>Welcome, " .$_SESSION["UserName"] . "</h2>";
+			?>
+			</br>
+			
+			<div class="userManagement">
+				<!-- Register new user -->
+				<input type="button" value="Register new user" onClick="document.getElementById('register_user').style.display = 'block';" ondblclick="document.getElementById('register_user').style.display='none';">
+
+				<fieldset id="register_user" style="display:none;">
+					<br/>
+					<form action="UserManager/registerUser.php" method="post" enctype="multipart/form-data">
+						Username: <input type="text" name="newLogin"></br>
+						Password: <input type="password" name="newPassword"></br>
+						Name: <input type="text" name="newName"></br>
+						Address: <input type="text" name="newAddress"></br>
+						NIF: <input type="text" name="newNIF"></br>
+						Email: <input type="email" name="newEmail"></br>
+						Role: <input type="text" name="newUserRoleID" placeholder="1. Admin 2. Developer"></br>
+						</br>
+						<input type="submit" value="Submit"></br>
+					</form>
+				</fieldset>
+				<br/>
+
+				<!-- Edit user -->
+				<br/>		
+				<input type="button" value="Edit user" onClick="document.getElementById('edit_user').style.display = 'inline-block';" ondblclick="document.getElementById('edit_user').style.display='none';">				
+
+				<fieldset id="edit_user" style="display:none;">
+					<form action="UserManager/editUser.php" method="post" enctype="multipart/form-data">
+						<input type="text" name="userEdit" placeholder="username"></br>
+						<input type="submit" value="Edit" id="editbutton"><br/>
+					</form>
+				</fieldset>
+				<br/>
+
+				<!-- Deactivate user -->
+				<br/>
+				<input type="button" value="Deactivate user" onClick="document.getElementById('deactivate_user').style.display = 'inline-block';" ondblclick="document.getElementById('deactivate_user').style.display='none';">
+				
+				<fieldset id="deactivate_user" style="display:none;">
+					<form action="UserManager/removeUser.php" method="post" enctype="multipart/form-data">
+						<input type="text" name="userRemove" placeholder="username"></br>
+						<input type="submit" value="Desactivate"><br/>
+					</form>
+				</fieldset>
+				<br/>
+			</div>
+
+			<div class="permissionManagement">
+				<!-- Register permission -->
+				<br/>
+				<input type="button" value="Register new permission" onClick="document.getElementById('register_perm').style.display = 'block';" ondblclick="document.getElementById('register_perm').style.display='none';">
+
+				<fieldset id="register_perm" style="display:none;">
+					<br/>
+					
+					<form action="PermissionManager/registerPerm.php" method="post" enctype="multipart/form-data">
+						</br>
+						New permission<input type="text" name="newPermDescr" placeholder="description"></br>
+						</br>
+						<input type="submit" value="Register"></br>
+					</form>
+				</fieldset>
+				</br>
+
+				<!-- Change permission -->
+				<br/>
+
+				<input type="button" value="Change developer's permissions" onClick="document.getElementById('change_perm').style.display = 'inline-block';" ondblclick="document.getElementById('change_perm').style.display='none';">
+
+				<fieldset id="change_perm" style="display:none;">
+					<form action="PermissionManager/changePerm.php" method="post" enctype="multipart/form-data">
+						<input type="text" name="UsernamechangePermission" placeholder="username"></br>
+						<input type="submit" value="Search for user"><br/>
+					</form>
+				</fieldset>
+				<br/>
+			</div>
+
+			<div class="backupManagement">
+				<!-- Backup -->
+				<br/>
+				<input type="button" value="Backup" onClick="document.getElementById('backup_user').style.display = 'inline-block';" ondblclick="document.getElementById('backup_user').style.display='none';">
+				<fieldset id="backup_user" style="display:none;">
+					<form action="BackupManager/backup.php" method="post" enctype="multipart/form-data">
+						<button>Download current database</button>
+					</form>
+				</fieldset>
+				<br/>
+
+				<!-- Restore backup -->
+				<br/>
+				<input type="button" value="Restore Backup" onClick="document.getElementById('restore_backup').style.display = 'inline-block';" ondblclick="document.getElementById('restore_backup').style.display='none';">
+				<fieldset id="restore_backup" style="display:none;">
+					<form action="BackupManager/restoreBackup.php" method="post" enctype="multipart/form-data">
+						<input type="file" name="Download"></br> <br>
+						<input type="submit" value="Upload"><br/>
+					</form>
+				</fieldset>
+				<br/>
+			</div>
+
+			<!-- Logout -->
+			<br/>
+			<form action="Login/login.html" method="post">
+				<input type="submit" value="Logout">
+			</form>
+		</div>
+    </body>
+</html>

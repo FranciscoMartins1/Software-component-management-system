@@ -1,0 +1,84 @@
+body{
+    background: #d7d7d7d7;
+    color: black;
+}
+
+.dark-mode {
+    background: black;
+    color: white;
+}
+
+.dark-mode .form {
+    background: #d7d7d7d7;
+}
+
+.form {
+    font-family: "Roboto", sans-serif;
+    position:relative;
+    background: #FFFFFF;
+    max-width: 600px;
+    margin: auto auto auto;
+    padding: 50px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 grey;
+    font-style: arial;
+}
+
+.form input {
+    outline: 10;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 20px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 15px;
+    text-align: center;
+}
+.form input[type="button"] {
+    outline: 0;
+    background-color: #fdcce7;
+    width: 100%;
+    border: 0;
+    padding: 15px;
+    font-size: 15px;
+}
+
+.form input[type=submit] {
+    text-transform: uppercase;
+    outline: 0;
+    background-color: #ff94cf;
+    width: fit-content;
+    border: 0;
+    padding: 15px;
+    font-size: 10px;
+}
+
+.form input[type=submit]:hover {
+    background-color: #b9b9b9;
+}
+
+.userManagement .body, .permissionManagement .body, .backupManagement .body {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.table {
+    border: solid 1px #ffdef5;
+    border-collapse: separate;
+    border-spacing: 10;
+    font: normal 13px Arial, sans-serif;
+}
+
+.table thead th {
+    border: solid 1px #ffdef5;
+    padding: 10px;
+    text-align: center;
+    text-shadow: 1px 1px 1px #fff;
+}
+
+.table tbody td {
+    border: solid 1px #ffdef5;
+    padding: 10px;
+}

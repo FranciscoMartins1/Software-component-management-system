@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="/projetoweb/Login/lang.js"></script>
+
+    <link rel="stylesheet" href="/projetoweb/CSS/styleTest1.css">
+    <script src="/projetoweb/CSS/theme.js"></script>
+
+    <title>Dependeny Manager</title>
+</head>
+<body>
+    <?php
+        $servidor = 'localhost';
+        $user = 'root';
+        $dbname = 'srsWeb';
+
+        $ligacao = mysqli_connect($servidor, $user) or die("Sem ligação");
+        mysqli_select_db($ligacao, $dbname) or die("Sem DB");
+
+        function UserPermissions($ligacao, $userID, $permID) {
+            $checkPerms = "SELECT PermissionID FROM srsDevPerm WHERE DevID = '$userID' AND PermissionID = '$permID'";
+            $perms = mysqli_query($ligacao, $checkPerms);
+            
+            if($perms -> num_rows > 0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    ?>
+
+    <div class="form">
+        <h1>Manage Dependencies</h1>
+        <?php include 'listComp.php';?>
+
+        <br/><br/>
+
+        <?php if (UserPermissions($ligacao, $userID, 3)): ?>
+            <input type="submit" value="Define dependency" onClick="window.location.href='defineDepen.html'"></br>
+        <?php endif; ?>
+
+        <?php if (UserPermissions($ligacao, $userID, 4)): ?>
+            <input type="submit" value="Change dependency" onClick="window.location.href='changeDepen.html'"></br>
+        <?php endif; ?>
+
+        <?php if (UserPermissions($ligacao, $userID, 5)): ?>
+            <input type="submit" value="Cancel dependency" onClick="window.location.href='cancelDepen.html'"></br>
+        <?php endif; ?>
+
+        <br/>
+        <br/>
+        <input type="button" value="Back to menu" onclick="window.location.href='/projetoweb/devUser.html';">
+    </div>
+</body>
+</html>

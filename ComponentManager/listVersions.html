@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<script src="/projetoweb/Login/lang.js"></script>
+
+    <link rel="stylesheet" href="/projetoweb/CSS/styleTest1.css">
+    <script src="/projetoweb/CSS/theme.js" defer></script>
+    <title>Versions</title>
+</head>
+<body>
+	<div class="form">
+		<h1>List Versions</h1>
+		<?php include 'listComp.php';?>
+
+		<br/>
+		<form action="" method="post">
+			<br/>    
+			Component: <input type="text" name="compID" placeholder="ID"></br>
+			<br/>
+			<input type="submit" value="Submit">
+		</form>
+		<br/>
+
+		<?php
+			if (!isset($_SESSION['UserID'])) {
+				header("Location: Login/login.html");
+				exit();
+			}
+
+			function getVersion($compID){
+				$servidor = "localhost";
+				$user = "root";
+				$dbname= "srsWeb";
+				
+				$ligacao = mysqli_connect($servidor,$user) or die("Sem ligação");
+				mysqli_select_db($ligacao,$dbname) or die("Sem DB");
+				
+				$consulta = "SELECT VersionID, VersionName , VersionCode FROM srsCompVersion WHERE VersionCompID = '" . $compID . "'";
+				return mysqli_query($ligacao, $consulta);
+			}
+			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+				$compID = $_POST['compID'];
+				$resultado = getVersion($compID);
+
+				if($resultado->num_rows > 0){
+					echo "<h2>Component $compID Versions</h2>";
+					echo "<table class='table'>
+					<tr>
+					<th>Version ID</th>
+					<th>Version Name</th>
+					</tr>";
+					while($row = $resultado->fetch_assoc()){
+						echo
+						"<tr>"
+						."<td>" .$row["VersionID"] . "</td>"
+						."<td>" .$row["VersionName"] . "</td>"
+						."</tr>";
+					}
+					echo "</table>";
+				} else{
+						echo "Component $compID has no versions.</br>";
+				}
+			}
+		?>
+		<br/>
+		<input type="button" value="Back to menu" onclick="window.location.href='/projetoweb/devUser.html'">
+	</div>
+</body>
+</html>

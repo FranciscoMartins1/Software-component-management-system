@@ -1,0 +1,104 @@
+<?php
+	session_start();
+
+	if ($_SESSION["RoleName"] != "developer") {
+		header("Location: Login/login.html");
+	}
+	
+	$servidor = 'localhost';
+	$user = 'root';
+	$dbname = 'srsWeb';
+
+	$ligacao = mysqli_connect($servidor, $user) or die("Sem ligação");
+	mysqli_select_db($ligacao, $dbname) or die("Sem DB");
+
+	$userID = $_SESSION['UserID'];
+
+	function UserPermissions($ligacao, $userID, $permID) {
+		$checkPerms = "SELECT PermissionID FROM srsDevPerm WHERE DevID = '$userID' AND PermissionID = '$permID'";
+		$perms = mysqli_query($ligacao, $checkPerms);
+		
+		if($perms -> num_rows > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+?>
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script src="Login/lang.js"></script>
+		
+		<link rel="stylesheet" href="CSS/styleTest1.css">
+		<script src="CSS/theme.js" defer></script>
+		<title>Developer Menu</title>
+	</head>
+	
+	<body>
+		<div class="form">
+
+			<h1>Developer</h1>
+			<?php
+				echo "<h2>Welcome, " .$_SESSION["UserName"] . "</h2>";
+			?>
+
+			<!-- Manage dependencies: define, change and cancel -->
+			<br/>
+			<input type="button" value="Manage dependencies" onclick="window.location.href='ComponentManager/manageDepen.html'">
+			<br/>
+		
+			<!-- List versions -->
+			<br/>
+			<input type="button" value="List versions" onclick="window.location.href='ComponentManager/listVersions.html'">
+			<br/>
+
+			<!-- Search component -->
+			<br/>
+			<input type="button" value="Search component" onClick="document.getElementById('search_comp').style.display = 'block';" ondblclick="document.getElementById('search_comp').style.display='none';">
+			<br/>
+			<fieldset id="search_comp" style="display:none;">
+				<form action="ComponentManager/searchComp.php" method="post">
+					<input type="text" name="compID" placeholder="Component ID"><br>
+					<br>
+					<input type="submit" value="Search">
+				</form>
+			</fieldset>
+
+			<!-- Create component -->
+			<br/>
+			<?php if (UserPermissions($ligacao, $userID, 1)): ?>
+			<input type="button" value="Create new component" onClick="document.getElementById('create_comp').style.display = 'block';" ondblclick="document.getElementById('create_comp').style.display='none';">
+
+			<fieldset id="create_comp" style="display:none;">
+				<br/>
+				<form action="ComponentManager/registerComp.php" method="post" enctype="multipart/form-data">
+					Name: <input type="text" name="newCompName"></br>
+					Description: <input type="text" name="newCompDescr"></br>
+					Creation date: <input type="date" name="newCompDate"></br>
+					Code: <input type="text" name="newCompCode"></br>
+					</br>
+					<input type="submit" value="Submit" onClick="document.getElementById('create_component').style.display = 'none';"></br>
+				</form>
+			</fieldset>
+			<?php endif; ?>
+			<br/>
+
+			<!-- Register version -->
+			<br/>
+			<?php if (UserPermissions($ligacao, $userID, 2)): ?>
+			<input type="button" value="Register new version" onclick="window.location.href='ComponentManager/registerVersion.html'">
+			<?php endif; ?>
+			<br/>
+
+			<!-- Logout -->
+			<br/>
+			<form action="Login/login.html" method="post">
+				<input type="submit" value="Logout">
+			</form>
+		</div>
+    </body>
+</html>

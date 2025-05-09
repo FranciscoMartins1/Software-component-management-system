@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="/projetoweb/Login/lang.js"></script>
+
+    <link rel="stylesheet" href="/projetoweb/CSS/styleTest1.css">
+    <script src="/projetoweb/CSS/theme.js" defer></script>
+    <title>Register Version</title>
+</head>
+<body>
+    <div class='form'>
+        <h1>Register Version</h1>
+        <?php include 'listComp.php';?>
+
+        <br/><br/>   
+        <form action="registerVersion.php" method="post">
+        ID da componente: <input type="text" name="compID"></br>
+        Version: <input type="text" name="newVersionName"></br>
+        Date: <input type="date" name="newVersionDate"></br>
+        Code: <input type="text" name="newVersionCode"><br> <br>
+
+        <input type="submit" value="Register">
+        </form>
+        <br/>
+        <input type="button" value="Back to menu" onclick="window.location.href='/projetoweb/devUser.html';">
+        </fieldset>
+    </div>
+</body>
+</html>
